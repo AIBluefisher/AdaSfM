@@ -1,1 +1,379 @@
-# AdaSfM
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="AdaSfM">
+  <meta name="keywords" content="AdaSfM, Structure from Motion, COLMAP">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdaSfM: From Coarse Global to Fine Incremental Adaptive Structure from Motion</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">AdaSfM: From Coarse Global to Fine Incremental Adaptive Structure from Motion</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://aibluefisher.github.io">Yu Chen</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="">Zihao Yu</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="">Shu Song</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Tianning Yu</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="">Jianming Li</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com.sg/citations?user=7hNKrPsAAAAJ">Gim Hee Lee</a><sup>1</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>National University of Singapore,</span>
+            <span class="author-block"><sup>2</sup>Segway-Ninebot,</span>
+            <span class="author-block"><sup>3</sup>Willand</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper (Coming Soon)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv (Coming Soon)</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img id="teaser" src="static/images/pipeline.png" />
+      <h2 class="subtitle has-text-centered">
+        AdaSfM takes images and measurements from low-cost sensors as inputs. The view graph is refined by the result of global SfM. 
+        The absolute poses from the global SfM are used as priors in the subsequent local
+        SfM process. The final reconstruction result is merged into the global SfM reference frame.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <img poster="" src="static/images/4seasons_01.png" />
+        </div>
+        <div class="item item-chair-tp">
+          <img poster="" src="static/images/4seasons_02.png" />
+        </div>
+        <div class="item item-shiba">
+          <img poster="" src="static/images/4seasons_03.png" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Despite the impressive results achieved by many
+            existing Structure from Motion (SfM) approaches, there is still
+            a need to improve the robustness, accuracy, and efficiency
+            for large-scale scenes with many outlier matches and sparse
+            view graphs. In this paper, we propose AdaSfM: a coarse-to-fine adaptive SfM approach that is scalable to large-scale
+            and challenging datasets. Our approach first does a coarse
+            global SfM which improves the reliability of the view graph by
+            leveraging measurements from low-cost sensors such as Inertial
+            Measurement Units (IMUs) and wheel encoders. Subsequently,
+            the view graph is divided into sub-scenes that are refined in
+            parallel by a fine local incremental SfM regularized by the result
+            from the coarse global SfM to improve the camera registration
+            accuracy and alleviate scene drifts. Finally, our approach uses
+            a threshold-adaptive strategy to align all local reconstructions
+            to the coordinate frame of global SfM. Extensive experiments
+            on large-scale benchmark datasets show that our approach
+            achieves state-of-the-art accuracy and efficiency.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="static/videos/results.mp4"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-2">Challenges in Visual Mapping</h2>
+    <div class="columns is-centered">
+
+      <!-- Visual Effects. -->
+      <div class="column">
+  
+        <div class="content">
+          <b>Top: Dynamic Objects</b>
+          <br />
+          <b>Bottom: Specular, Repetitive Textures</b>
+          <!-- <p>
+            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
+            would be impossible without nerfies since it would require going through a wall.
+          </p> -->
+          <img poster="" src="static/images/match_challenge_01.png" />
+        </div>
+      </div>
+      <!--/ Visual Effects. -->
+
+      <!-- Matting. -->
+      <div class="column">
+        <b>Top: Features Distributed Not Evenly</b>
+        <br />
+        <b>Bottom: Texture-less</b>
+        <div class="columns is-centered">
+          <div class="column content">
+            <!-- <p>
+              As a byproduct of our method, we can also solve the matting problem by ignoring
+              samples that fall outside of a bounding box during rendering.
+            </p> -->
+            <img poster="" src="static/images/match_challenge_02.png" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Matting. -->
+
+    <h2 class="title is-2">Feature Matches After Refinement</h2>
+    <div class="columns is-centered">
+      <img poster="" src="static/images/matches_02.png" />
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Animation. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Evaluation on 4Seasons Dataset</h2>
+
+        <!-- Interpolating. -->
+        <h3 class="title is-4">Effect of Augmented View Graph</h3>
+        <div class="content has-text-justified">
+          <!-- <p>
+            We can also animate the scene by interpolating the deformation latent codes of two input
+            frames. Use the slider here to linearly interpolate between the left frame and the right
+            frame.
+          </p> -->
+        </div>
+        <div class="columns is-vcentered interpolation-panel">
+          <img poster="" src="static/images/4seasons_01.png" />
+        </div>
+        <br/>
+
+        <h3 class="title is-4">Effect of Adaptive Flood Fill Image Partition</h3>
+        <div class="content has-text-justified">
+          <!-- <p>
+            We can also animate the scene by interpolating the deformation latent codes of two input
+            frames. Use the slider here to linearly interpolate between the left frame and the right
+            frame.
+          </p> -->
+        </div>
+        <div class="columns is-vcentered interpolation-panel">
+          <img poster="" src="static/images/4seasons_02.png" />
+        </div>
+        <br/>
+
+        <h3 class="title is-4">Effect of Introducing Global SfM</h3>
+        <div class="content has-text-justified">
+          <!-- <p>
+            We can also animate the scene by interpolating the deformation latent codes of two input
+            frames. Use the slider here to linearly interpolate between the left frame and the right
+            frame.
+          </p> -->
+        </div>
+        <div class="columns is-vcentered interpolation-panel">
+          <img poster="" src="static/images/4seasons_03.png" />
+        </div>
+        <br/>
+        <!--/ Interpolating. -->
+
+    <!-- Animation. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Evaluation on Self-Collected Outdoor Dataset</h2>
+
+        <!-- Interpolating. -->
+        <h3 class="title is-4">Comparison with COLMAP</h3>
+        <div class="content has-text-justified">
+          <!-- <p>
+            We can also animate the scene by interpolating the deformation latent codes of two input
+            frames. Use the slider here to linearly interpolate between the left frame and the right
+            frame.
+          </p> -->
+        </div>
+        <div class="columns is-vcentered interpolation-panel">
+          <img poster="" src="static/images/mower_01.png" />
+        </div>
+        <br/>
+        <div class="columns is-vcentered interpolation-panel">
+          <img poster="" src="static/images/mower_02.png" />
+        </div>
+
+        <h3 class="title is-4">More Visual Results</h3>
+        <div class="content has-text-justified">
+          <!-- <p>
+            We can also animate the scene by interpolating the deformation latent codes of two input
+            frames. Use the slider here to linearly interpolate between the left frame and the right
+            frame.
+          </p> -->
+        </div>
+        <!-- <div
+         class="columns is-vcentered interpolation-panel">
+          <img poster="" src="static/images/mower_04.png" />
+        </div>
+        <br/> -->
+        <div class="columns is-vcentered interpolation-panel">
+          <img poster="" src="static/images/mower_05.png" />
+        </div>
+        <br/>
+        <!--/ Interpolating. -->
+
+      </div>
+    </div>
+    <!--/ Animation. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{park2021nerfies,
+  author    = {Yu Chen, Zihao Yu, Shu Song, Tianning Yu, Jianming Li, Gim Hee Lee},
+  title     = {AdaSfM: From Coarse Global to Fine Incremental Adaptive Structure from Motion},
+  year      = {2022},
+    <!-- journal   = {}, -->
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is borrowed from the <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
